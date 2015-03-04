@@ -14,13 +14,13 @@ class Json extends CI_Controller
         $data = json_decode(file_get_contents('php://input'), true);
 		$email=$data['email'];
 		$password=$data['password'];
-		$data['message']=$this->user_model->login($email,$password);
+		$data['message']=$this->json_model->login($email,$password);
 		$this->load->view('json',$data);
 	}
     
     public function authenticate() 
 	{
-		$data['message']=$this->user_model->authenticate();
+		$data['message']=$this->json_model->authenticate();
 		$this->load->view('json',$data);
 	}
     
@@ -30,6 +30,12 @@ class Json extends CI_Controller
         $data['message']="true";
         $this->load->view('json',$data);
 	}
+    
+    public function usersdetail() 
+    {
+         $data['message']=$this->json_model->getstudentdash();
+         $this->load->view('json',$data);
+    }
     
 }
 //EndOfFile
