@@ -134,6 +134,7 @@ class Json extends CI_Controller
         $data['message']="false";
         else
         $data['message']="true";
+		$this->load->view('json',$data);
 	}
     
     function editprofilebefore()
