@@ -187,6 +187,24 @@ class Json extends CI_Controller
     }
     
     
+    function getfacebookallposts()
+	{
+      
+        $data["message"]=new stdClass();
+        $data["message"]->posts=$this->json_model->getpostsofuserfb();
+        $data["message"]->stats=$this->json_model->getfacebookstats();
+        $this->load->view('json',$data);
+    }
+    
+    function gettwitterallposts()
+	{
+      
+        $data["message"]=new stdClass();
+        $data["message"]->posts=$this->json_model->getpostsofuserfb();
+        $data["message"]->stats=$this->json_model->getfacebookstats();
+        $this->load->view('json',$data);
+    }
+    
 }
 //EndOfFile
 ?>
