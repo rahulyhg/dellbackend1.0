@@ -95,6 +95,11 @@ class Json extends CI_Controller
         $elements[7]->header="College";
         $elements[7]->alias="college";
        
+        $elements[8]=new stdClass();
+        $elements[8]->field="`user`.`image`";
+        $elements[8]->sort="1";
+        $elements[8]->header="Image";
+        $elements[8]->alias="image";
         
         $search=$this->input->get_post("search");
         $pageno=$this->input->get_post("pageno");
@@ -112,7 +117,7 @@ class Json extends CI_Controller
             $orderorder="ASC";
         }
        
-        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `user` LEFT OUTER JOIN `userpost` ON `user`.`id`=`userpost`.`user` LEFT OUTER JOIN `college` ON `college`.`id`=`user`.`college` ","WHERE `user`.`accesslevel`=2","GROUP BY `user`.`id`","","");
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `user` LEFT OUTER JOIN `userpost` ON `user`.`id`=`userpost`.`user` LEFT OUTER JOIN `college` ON `college`.`id`=`user`.`college` ","WHERE `user`.`accesslevel`=2","GROUP BY `user`.`id` ","","");
         
 		$this->load->view("json",$data);
 	} 
