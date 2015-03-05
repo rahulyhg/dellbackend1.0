@@ -101,8 +101,9 @@ class Json_model extends CI_Model
 		return 1;
 	}
     
-    public function changeuserpassword($id,$password,$confirmpassword,$currentpassword)
+    public function changeuserpassword($password,$confirmpassword,$currentpassword)
     {
+        $id=$this->session->userdata("id");
         if($password==$confirmpassword)
         {
             $data  = array(
@@ -121,6 +122,30 @@ class Json_model extends CI_Model
             return 0;
         }
     }
+    
+    public function getfacebookstats($userid)
+	{
+        
+        $totalcountpost=$this->db->query("SELECT count(`id`) as `count1` FROM `post` WHERE `posttype`='1'")->row();
+        $postdonebyuser=$this->db->query("SELECT COUNT(*) as `count2` FROM (SELECT DISTINCT `post` FROM `userpost` WHERE `userpost`.`user`='$userid' AND `userpost`.`posttype`='1') as `tab1`")->row();
+        $query->totalpost=floatval($totalcountpost->count1);
+        $query->actiondone=floatval($postdonebyuser->count2);
+        $query->remaining=floatval($totalcountpost->count1)-floatval($postdonebyuser->count2);
+		return $query;
+	}
+    
+    public function gettwitterstats($userid)
+	{
+        
+        $totalcountpost=$this->db->query("SELECT count(`id`) as `count1` FROM `post` WHERE `posttype`='2'")->row();
+        $postdonebyuser=$this->db->query("SELECT COUNT(*) as `count2` FROM (SELECT DISTINCT `post` FROM `userpost` WHERE `userpost`.`user`='$userid' AND `userpost`.`posttype`='2') as `tab1`")->row();
+        $query->totalpost=floatval($totalcountpost->count1);
+        $query->actiondone=floatval($postdonebyuser->count2);
+        $query->remaining=floatval($totalcountpost->count1)-floatval($postdonebyuser->count2);
+		return $query;
+	}
+    
+    
     
 }
 	

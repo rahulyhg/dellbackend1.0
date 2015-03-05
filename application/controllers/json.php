@@ -124,13 +124,13 @@ class Json extends CI_Controller
     
     function changepasswordsubmit()
 	{
-		
-        $id=$this->input->get_post('id');
-        $password=$this->input->get_post('password');
-        $confirmpassword=$this->input->get_post('confirmpassword');
-        $currentpassword=$this->input->get_post('currentpassword');
+		$data = json_decode(file_get_contents('php://input'), true);
+        $password=$data['password'];
+        $confirmpassword=$data['confirmpassword'];
+        $currentpassword=$data['currentpassword'];
+        
        
-		if($this->json_model->changeuserpassword($id,$password,$confirmpassword,$currentpassword)==0)
+		if($this->json_model->changeuserpassword($password,$confirmpassword,$currentpassword)==0)
         $data['message']="false";
         else
         $data['message']="true";
@@ -165,6 +165,25 @@ class Json extends CI_Controller
         $data['message']="User edited Successfully.";
         $this->load->view('json',$data);
 	}
+    
+    function getfacebookposts()
+	{
+        $id=$this->input->get_post("id");
+        $data["message"]=new stdClass();
+        $data["message"]->posts=$this->json_model->getpostsofuserfb($id);
+        $data["message"]->stats=$this->json_model->getfacebookstats($id);
+        $this->load->view('json',$data);
+    }
+    
+    function gettwitterposts()
+	{
+        $id=$this->input->get_post("id");
+        $data["message"]=new stdClass();
+        $data["message"]->posts=$this->json_model->getpostsofusertwitter($id);
+        $data["message"]->stats=$this->json_model->gettwitterstats($id);
+        $this->load->view('json',$data);
+    }
+    
     
 }
 //EndOfFile
