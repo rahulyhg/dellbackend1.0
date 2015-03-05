@@ -65,8 +65,9 @@ class Json_model extends CI_Model
         }
     }
     
-    public function getpostsofuserfb( $id )
+    public function getpostsofuserfb(  )
 	{
+        $id=$this->session->userdata("id");
 		$query=$this->db->query("SELECT `userpost`.`id`,`userpost`.`post`, `userpost`.`likes`, `userpost`.`comment`, `userpost`.`favourites`, `userpost`.`retweet`, `userpost`.`returnpostid`, `userpost`.`posttype`,`posttype`.`name` AS `posttypename`, `userpost`.`user`,`userpost`.`share`, `userpost`.`timestamp`,`user`.`name` AS `username`,`post`.`text` AS `posttext`
         FROM `userpost`
         LEFT OUTER JOIN `user` ON `user`.`id`=`userpost`.`user`
@@ -75,8 +76,9 @@ class Json_model extends CI_Model
         WHERE `userpost`.`user`='$id' AND `userpost`.`posttype`='1' AND `userpost`.`timestamp`<> '1970-01-01 17:00:00' AND `userpost`.`timestamp`<> '0000-00-00 00:00:00'")->result();
 		return $query;
 	}
-    public function getpostsofusertwitter( $id )
+    public function getpostsofusertwitter(  )
 	{
+        $id=$this->session->userdata("id");
 		$query=$this->db->query("SELECT `userpost`.`id`,`userpost`.`post`, `userpost`.`likes`, `userpost`.`comment`, `userpost`.`favourites`, `userpost`.`retweet`, `userpost`.`returnpostid`, `userpost`.`posttype`,`posttype`.`name` AS `posttypename`, `userpost`.`user`,`userpost`.`share`, `userpost`.`timestamp`,`user`.`name` AS `username`,`post`.`text` AS `posttext`
         FROM `userpost`
         LEFT OUTER JOIN `user` ON `user`.`id`=`userpost`.`user`
@@ -112,7 +114,7 @@ class Json_model extends CI_Model
             );
 
             $this->db->where( 'id', $id );
-            $this->db->where( 'password', mf5($currentpassword) );
+            $this->db->where( 'password', md5($currentpassword) );
             $query=$this->db->update( 'user', $data );
 
             return 1;
@@ -123,25 +125,35 @@ class Json_model extends CI_Model
         }
     }
     
-    public function getfacebookstats($userid)
+    public function getfacebookstats()
 	{
-        
+        $userid=$this->session->userdata("id");
         $totalcountpost=$this->db->query("SELECT count(`id`) as `count1` FROM `post` WHERE `posttype`='1'")->row();
         $postdonebyuser=$this->db->query("SELECT COUNT(*) as `count2` FROM (SELECT DISTINCT `post` FROM `userpost` WHERE `userpost`.`user`='$userid' AND `userpost`.`posttype`='1') as `tab1`")->row();
+        $query=new stdClass();
         $query->totalpost=floatval($totalcountpost->count1);
         $query->actiondone=floatval($postdonebyuser->count2);
         $query->remaining=floatval($totalcountpost->count1)-floatval($postdonebyuser->count2);
 		return $query;
 	}
     
-    public function gettwitterstats($userid)
+    public function gettwitterstats()
 	{
-        
+        $userid=$this->session->userdata("id");
         $totalcountpost=$this->db->query("SELECT count(`id`) as `count1` FROM `post` WHERE `posttype`='2'")->row();
         $postdonebyuser=$this->db->query("SELECT COUNT(*) as `count2` FROM (SELECT DISTINCT `post` FROM `userpost` WHERE `userpost`.`user`='$userid' AND `userpost`.`posttype`='2') as `tab1`")->row();
+        $query=new stdClass();
         $query->totalpost=floatval($totalcountpost->count1);
         $query->actiondone=floatval($postdonebyuser->count2);
         $query->remaining=floatval($totalcountpost->count1)-floatval($postdonebyuser->count2);
+		return $query;
+	}
+    
+    public function beforeedit(  )
+	{
+        $id=$this->session->userdata("id");
+		$this->db->where( 'id', $id );
+		$query=$this->db->get( 'user' )->row();
 		return $query;
 	}
     

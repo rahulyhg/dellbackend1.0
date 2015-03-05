@@ -138,15 +138,15 @@ class Json extends CI_Controller
     
     function editprofilebefore()
     {
-        $id=$this->input->get('id');
-		$data['message']=$this->user_model->beforeedit($id);	
+     
+		$data['message']=$this->json_model->beforeedit();	
 		$this->load->view('json',$data);
     }
     
     function editprofilesubmit()
 	{
 		
-		$id=$this->input->get_post('id');
+		
         $name=$this->input->get_post('name');
         $college=$this->input->get_post('college');
         $contact=$this->input->get_post('contact');
@@ -159,7 +159,7 @@ class Json extends CI_Controller
             $dob = date("Y-m-d",strtotime($dob));
         }
 
-        if($this->json_model->edituserprofile($id,$name,$college,$contact,$city,$dob)==0)
+        if($this->json_model->edituserprofile($name,$college,$contact,$city,$dob)==0)
         $data['message']="User Editing was unsuccesful";
         else
         $data['message']="User edited Successfully.";
@@ -168,19 +168,19 @@ class Json extends CI_Controller
     
     function getfacebookposts()
 	{
-        $id=$this->input->get_post("id");
+      
         $data["message"]=new stdClass();
-        $data["message"]->posts=$this->json_model->getpostsofuserfb($id);
-        $data["message"]->stats=$this->json_model->getfacebookstats($id);
+        $data["message"]->posts=$this->json_model->getpostsofuserfb();
+        $data["message"]->stats=$this->json_model->getfacebookstats();
         $this->load->view('json',$data);
     }
     
     function gettwitterposts()
 	{
-        $id=$this->input->get_post("id");
+        
         $data["message"]=new stdClass();
-        $data["message"]->posts=$this->json_model->getpostsofusertwitter($id);
-        $data["message"]->stats=$this->json_model->gettwitterstats($id);
+        $data["message"]->posts=$this->json_model->getpostsofusertwitter();
+        $data["message"]->stats=$this->json_model->gettwitterstats();
         $this->load->view('json',$data);
     }
     
