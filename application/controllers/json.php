@@ -148,11 +148,12 @@ class Json extends CI_Controller
 	{
 		
 		
-        $name=$this->input->get_post('name');
-        $college=$this->input->get_post('college');
-        $contact=$this->input->get_post('contact');
-        $city=$this->input->get_post('city');
-        $dob=$this->input->get_post('dob');
+		$data = json_decode(file_get_contents('php://input'), true);
+
+        $name=$data['name'];
+        $contact=$data['contact'];
+        $city=$data['city'];
+        $dob=$data['dob'];
         
         
         if($dob != "")
@@ -161,9 +162,9 @@ class Json extends CI_Controller
         }
 
         if($this->json_model->edituserprofile($name,$contact,$city,$dob)==0)
-        $data['message']="User Editing was unsuccesful";
+        $data['message']=false;
         else
-        $data['message']="User edited Successfully.";
+        $data['message']=true;
         $this->load->view('json',$data);
 	}
     
