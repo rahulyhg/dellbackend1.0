@@ -46,7 +46,8 @@ class Json_model extends CI_Model
 		$query=$this->db->query("SELECT IFNULL(SUM(`userpost`.`share`+`userpost`.`likes`+`userpost`.`comment`+`userpost`.`retweet`+`userpost`.`favourites`),0) as `score`, `user`.`name`,`user`.`id`,`user`.`email`,`user`.`sex`,`user`.`city`,`user`.`dob`,IFNULL(SUM(`userpost`.`share`+`userpost`.`likes`+`userpost`.`comment`),0) as `facebook`,IFNULL(SUM(`userpost`.`retweet`+`userpost`.`favourites`),0) as `twitter`,IFNULL(SUM(`userpost`.`retweet`),0) as `totalretweet`,IFNULL(SUM(`userpost`.`favourites`),0) AS `totalfavourites`,IFNULL(SUM(`userpost`.`share`),0) AS `totalshare`,IFNULL(SUM(`userpost`.`likes` ),0) AS `totallikes`,IFNULL(SUM(`userpost`.`comment`),0) AS `totalcomment`,`user`.`rank` as `rank`,`user`.`image` as `image` FROM `user` LEFT OUTER JOIN `userpost` ON `user`.`id`=`userpost`.`user` WHERE `user`.`id`='$userid'")->row();
         $totalcountpost=$this->db->query("SELECT count(`id`) as `count1` FROM `post`")->row();
         $postdonebyuser=$this->db->query("SELECT COUNT(*) as `count2` FROM (SELECT DISTINCT `post` FROM `userpost` WHERE `userpost`.`user`='$userid') as `tab1`")->row();
-        
+        $query->totalpost=floatval($totalcountpost->count1);
+        $query->actiondone=floatval($postdonebyuser->count2);
         $query->remaining=floatval($totalcountpost->count1)-floatval($postdonebyuser->count2);
 		return $query;
 	}

@@ -570,13 +570,7 @@ class Site extends CI_Controller
 	{
 		$access = array("1","2");
 		$this->checkaccess($access);
-        
-//        SELECT `userpost`.`id`,`userpost`.`post`, `userpost`.`likes`, `userpost`.`comment`, `userpost`.`favourites`, `userpost`.`retweet`, `userpost`.`returnpostid`, `userpost`.`posttype`,`posttype`.`name` AS `posttypename`, `userpost`.`user`,`userpost`.`share`, `userpost`.`timestamp`,`user`.`name` AS `username`,`post`.`text` AS `posttext`
-//        FROM `userpost`
-//        LEFT OUTER JOIN `user` ON `user`.`id`=`userpost`.`user`
-//        LEFT OUTER JOIN `post` ON `post`.`id`=`userpost`.`post`
-//        LEFT OUTER JOIN `posttype` ON `posttype`.`id`=`userpost`.`posttype`
-//        WHERE `userpost`.`user`='$id'
+
         $id=$this->input->get('id');
         $elements=array();
         $elements[0]=new stdClass();
