@@ -2,8 +2,7 @@
 class Json extends CI_Controller 
 {
 
-    
-    	public function exportexcelreport()
+    public function exportexcelreport()
 	{
 		$this->userpost_model->exportexcelreport();
             
@@ -168,40 +167,77 @@ class Json extends CI_Controller
         $this->load->view('json',$data);
 	}
     
-    function getfacebookposts()
-	{
-      
-        $data["message"]=new stdClass();
-        $data["message"]->posts=$this->json_model->getpostsofuserfb();
-        $data["message"]->stats=$this->json_model->getfacebookstats();
+    function getfacebooknextpost()
+    {
+        $lastid=$this->input->get_post("id");
+        if($lastid=="")
+        {
+            $lastid=0;
+        }
+        if($direction=="")
+        {
+            $direction=0;
+        }
+        if($social=="")
+        {
+            $social=1;
+        }
+        $data["message"]=$this->json_model->getnextpost($lastid,1,1);
+        $this->load->view('json',$data);
+    }
+    function getfacebookprevpost()
+    {
+        $lastid=$this->input->get_post("id");
+        if($lastid=="")
+        {
+            $lastid=0;
+        }
+        if($direction=="")
+        {
+            $direction=0;
+        }
+        if($social=="")
+        {
+            $social=1;
+        }
+        $data["message"]=$this->json_model->getnextpost($lastid,0,1);
         $this->load->view('json',$data);
     }
     
-    function gettwitterposts()
-	{
-        
-        $data["message"]=new stdClass();
-        $data["message"]->posts=$this->json_model->getpostsofusertwitter();
-        $data["message"]->stats=$this->json_model->gettwitterstats();
+    function gettwitternextpost()
+    {
+        $lastid=$this->input->get_post("id");
+        if($lastid=="")
+        {
+            $lastid=0;
+        }
+        if($direction=="")
+        {
+            $direction=0;
+        }
+        if($social=="")
+        {
+            $social=1;
+        }
+        $data["message"]=$this->json_model->getnextpost($lastid,1,2);
         $this->load->view('json',$data);
     }
-    
-    
-    function getfacebookallposts()
-	{
-      
-        $data["message"]=new stdClass();
-        $data["message"]->posts=$this->json_model->getpostsofuserfb();
-        $data["message"]->stats=$this->json_model->getfacebookstats();
-        $this->load->view('json',$data);
-    }
-    
-    function gettwitterallposts()
-	{
-      
-        $data["message"]=new stdClass();
-        $data["message"]->posts=$this->json_model->getpostsofuserfb();
-        $data["message"]->stats=$this->json_model->getfacebookstats();
+    function gettwitterprevpost()
+    {
+        $lastid=$this->input->get_post("id");
+        if($lastid=="")
+        {
+            $lastid=0;
+        }
+        if($direction=="")
+        {
+            $direction=0;
+        }
+        if($social=="")
+        {
+            $social=1;
+        }
+        $data["message"]=$this->json_model->getnextpost($lastid,0,2);
         $this->load->view('json',$data);
     }
     

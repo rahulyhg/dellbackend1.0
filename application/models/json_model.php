@@ -154,7 +154,33 @@ class Json_model extends CI_Model
 		$query=$this->db->get( 'user' )->row();
 		return $query;
 	}
-    
+    public function getnextpost($lastid=0,$direction=1,$social=1)
+    {
+
+        if($direction==1)
+        {
+            $sign=">";
+            $orderby="ASC";
+        }
+        else
+        {
+            $sign="<";
+            $orderby="DESC";
+        }
+        
+        $query=$this->db->query("SELECT  `post`.`id`  AS `id` ,  `post`.`text`  AS `text` ,  `post`.`image`  AS `image` ,  `post`.`posttype`  AS `posttype` ,  `post`.`timestamp`  AS `timestamp` ,  `posttype`.`name`  AS `posttypename` ,  `userpost`.`returnpostid`  AS `returnpostid` ,  `post`.`link`  AS `link`  FROM `post` LEFT OUTER JOIN `posttype` ON `posttype`.`id`=`post`.`posttype` LEFT OUTER JOIN `userpost` ON `userpost`.`post`=`post`.`id`  WHERE `post`.`posttype`='$social' AND `post`.`id` $sign '$lastid' GROUP BY `post`.`id` ORDER BY  `post`.`timestamp` $orderby LIMIT 0,1");
+        $roweffected=$query->num_rows();
+        if($roweffected!=1)
+        {
+             $result=$this->db->query("SELECT  `post`.`id`  AS `id` ,  `post`.`text`  AS `text` ,  `post`.`image`  AS `image` ,  `post`.`posttype`  AS `posttype` ,  `post`.`timestamp`  AS `timestamp` ,  `posttype`.`name`  AS `posttypename` ,  `userpost`.`returnpostid`  AS `returnpostid` ,  `post`.`link`  AS `link`  FROM `post` LEFT OUTER JOIN `posttype` ON `posttype`.`id`=`post`.`posttype` LEFT OUTER JOIN `userpost` ON `userpost`.`post`=`post`.`id`  WHERE `post`.`posttype`='$social' GROUP BY `post`.`id` ORDER BY  `post`.`timestamp` $orderby LIMIT 0,1")->row();
+        }
+        else
+        {
+            $result=$query->row();
+        }
+        return $result;
+        
+    }
     
     
 }
