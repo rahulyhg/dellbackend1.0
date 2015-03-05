@@ -101,6 +101,27 @@ class Json_model extends CI_Model
 		return 1;
 	}
     
+    public function changeuserpassword($id,$password,$confirmpassword,$currentpassword)
+    {
+        if($password==$confirmpassword)
+        {
+            $data  = array(
+                'name' => $name,
+                'password'=> $contact,
+            );
+
+            $this->db->where( 'id', $id );
+            $this->db->where( 'password', mf5($currentpassword) );
+            $query=$this->db->update( 'user', $data );
+
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    
 }
 	
 ?>

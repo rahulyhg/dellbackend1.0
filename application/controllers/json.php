@@ -125,19 +125,15 @@ class Json extends CI_Controller
     function changepasswordsubmit()
 	{
 		
-		$this->form_validation->set_rules('password','Password','trim|min_length[6]|max_length[30]');
-		$this->form_validation->set_rules('confirmpassword','Confirm Password','trim|matches[password]');
-        
-		if($this->form_validation->run() == FALSE)	
-		{
-			$data['message'] = validation_errors();
-            $this->load->view('json',$data);
-		}
-		else
-		{
-			$data['message']="Change Password Successfully.";
-			$this->load->view("json",$data);
-		}
+        $id=$this->input->get_post('id');
+        $password=$this->input->get_post('password');
+        $confirmpassword=$this->input->get_post('confirmpassword');
+        $currentpassword=$this->input->get_post('currentpassword');
+       
+		if($this->json_model->changeuserpassword($id,$password,$confirmpassword,$currentpassword)==0)
+        $data['message']="false";
+        else
+        $data['message']="true";
 	}
     
     function editprofilebefore()
