@@ -131,9 +131,9 @@ class Json extends CI_Controller
         
        
 		if($this->json_model->changeuserpassword($password,$confirmpassword,$currentpassword)==0)
-        $data['message']="false";
+        $data['message']=false;
         else
-        $data['message']="true";
+        $data['message']=true;
 		$this->load->view('json',$data);
 	}
     

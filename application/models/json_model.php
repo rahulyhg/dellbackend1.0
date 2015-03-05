@@ -106,18 +106,16 @@ class Json_model extends CI_Model
     public function changeuserpassword($password,$confirmpassword,$currentpassword)
     {
         $id=$this->session->userdata("id");
-        if($password==$confirmpassword)
+        if($password===$confirmpassword)
         {
             $data  = array(
-                'name' => $name,
-                'password'=> $contact,
+                'password'=> md5($password)
             );
 
             $this->db->where( 'id', $id );
             $this->db->where( 'password', md5($currentpassword) );
             $query=$this->db->update( 'user', $data );
-
-            return 1;
+			return $this->db->affected_rows();
         }
         else
         {
