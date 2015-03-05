@@ -36,16 +36,7 @@ class Json extends CI_Controller
          $data['message']=$this->json_model->getstudentdash();
          $this->load->view('json',$data);
     }
-    function viewleaderboard()
-	{
-		$access = array("1","2");
-		$this->checkaccess($access);
-		$data['page']='viewleaderboard';
-        $data['base_url'] = site_url("site/viewleaderboardjson");
-        
-		$data['title']='View leaderboard';
-		$this->load->view('template',$data);
-	} 
+    
     function viewleaderboardjson()
 	{
 		$access = array("1","2");
