@@ -87,14 +87,14 @@ class Json_model extends CI_Model
         WHERE `userpost`.`user`='$id' AND `userpost`.`posttype`='2' AND `userpost`.`timestamp`<> '1970-01-01 17:00:00' AND `userpost`.`timestamp`<> '0000-00-00 00:00:00'")->result();
 		return $query;
 	}
-    public function edituserprofile($id,$name,$college,$contact,$city,$dob)
+    public function edituserprofile($name,$contact,$city,$dob)
 	{
+        $id=$this->session->userdata("id");
 		$data  = array(
 			'name' => $name,
 			'contact'=> $contact,
             'dob'=> $dob,
             'city'=> $city,
-            'college'=> $college
 		);
 
 		$this->db->where( 'id', $id );

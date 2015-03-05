@@ -160,7 +160,7 @@ class Json extends CI_Controller
             $dob = date("Y-m-d",strtotime($dob));
         }
 
-        if($this->json_model->edituserprofile($name,$college,$contact,$city,$dob)==0)
+        if($this->json_model->edituserprofile($name,$contact,$city,$dob)==0)
         $data['message']="User Editing was unsuccesful";
         else
         $data['message']="User edited Successfully.";
