@@ -39,8 +39,7 @@ class Json extends CI_Controller
     
     function viewleaderboardjson()
 	{
-		$access = array("1","2");
-		$this->checkaccess($access);
+		
         
 //        SELECT IFNULL(SUM(`userpost`.`share`+`userpost`.`likes`+`userpost`.`comment`+`userpost`.`retweet`+`userpost`.`favourites`),0) as `score`, `user`.`name`,`user`.`id`,`user`.`email`,IFNULL(SUM(`userpost`.`share`+`userpost`.`likes`+`userpost`.`comment`),0) as `facebook`,IFNULL(SUM(`userpost`.`retweet`+`userpost`.`favourites`),0) as `twitter` FROM `user` LEFT OUTER JOIN `userpost` ON `user`.`id`=`userpost`.`user` GROUP BY `user`.`id`
         
@@ -121,6 +120,45 @@ class Json extends CI_Controller
         
 		$this->load->view("json",$data);
 	} 
+    
+    
+    function changepasswordsubmit()
+	{
+		
+		$this->form_validation->set_rules('password','Password','trim|min_length[6]|max_length[30]');
+		$this->form_validation->set_rules('confirmpassword','Confirm Password','trim|matches[password]');
+        
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+    //		$data[ 'status' ] =$this->user_model->getstatusdropdown();
+    //		$data['accesslevel']=$this->user_model->getaccesslevels();
+    //		$data[ 'logintype' ] =$this->user_model->getlogintypedropdown();
+    //        $data[ 'sex' ] =$this->user_model->getsexdropdown();
+    //		$data[ 'college' ] =$this->college_model->getcollegedropdown();
+    //		$data['before']=$this->user_model->beforeedit($this->session->userdata('id'));
+            $data['page']='changepassword';
+    //		$data['page2']='block/userblock';
+            $data['title']='Change Password';
+            $this->load->view('template',$data);
+		}
+		else
+		{
+            
+            $id=$this->input->get_post('id');
+            $password=$this->input->get_post('password');
+			if($this->user_model->changepassword($id,$password)==0)
+			$data['alerterror']="Changed Password unsuccesful";
+			else
+			$data['alertsuccess']="Change Password Successfully.";
+			
+			$data['redirect']="site/viewnormaluserprofile";
+			//$data['other']="template=$template";
+			$this->load->view("redirect",$data);
+			
+		}
+	}
+    
 }
 //EndOfFile
 ?>

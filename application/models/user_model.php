@@ -529,8 +529,8 @@ LEFT OUTER JOIN `user` ON `user`.`id`=`userpost`.`user`
 //        else
 //        {
             
-		$this->session->sess_destroy();
-            return 1;
+		      $this->session->sess_destroy();
+              return 1;
 //        }
 	}
     public function assignranks()
