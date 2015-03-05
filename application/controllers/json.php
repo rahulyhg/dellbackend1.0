@@ -130,32 +130,13 @@ class Json extends CI_Controller
         
 		if($this->form_validation->run() == FALSE)	
 		{
-			$data['alerterror'] = validation_errors();
-    //		$data[ 'status' ] =$this->user_model->getstatusdropdown();
-    //		$data['accesslevel']=$this->user_model->getaccesslevels();
-    //		$data[ 'logintype' ] =$this->user_model->getlogintypedropdown();
-    //        $data[ 'sex' ] =$this->user_model->getsexdropdown();
-    //		$data[ 'college' ] =$this->college_model->getcollegedropdown();
-    //		$data['before']=$this->user_model->beforeedit($this->session->userdata('id'));
-            $data['page']='changepassword';
-    //		$data['page2']='block/userblock';
-            $data['title']='Change Password';
-            $this->load->view('template',$data);
+			$data['message'] = validation_errors();
+            $this->load->view('json',$data);
 		}
 		else
 		{
-            
-            $id=$this->input->get_post('id');
-            $password=$this->input->get_post('password');
-			if($this->user_model->changepassword($id,$password)==0)
-			$data['alerterror']="Changed Password unsuccesful";
-			else
-			$data['alertsuccess']="Change Password Successfully.";
-			
-			$data['redirect']="site/viewnormaluserprofile";
-			//$data['other']="template=$template";
-			$this->load->view("redirect",$data);
-			
+			$data['message']="Change Password Successfully.";
+			$this->load->view("json",$data);
 		}
 	}
     
