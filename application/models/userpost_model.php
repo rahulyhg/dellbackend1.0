@@ -134,7 +134,7 @@ class Userpost_model extends CI_Model
         LEFT OUTER JOIN `user` ON `user`.`id`=`userpost`.`user`
         LEFT OUTER JOIN `post` ON `post`.`id`=`userpost`.`post`
         LEFT OUTER JOIN `posttype` ON `posttype`.`id`=`userpost`.`posttype`
-        WHERE `userpost`.`user`='$id'")->result();
+        WHERE `userpost`.`user`='$id' AND `userpost`.`timestamp`<> '1970-01-01 17:00:00' AND `userpost`.`timestamp`<> '0000-00-00 00:00:00'")->result();
 		return $query;
 	}
     public function getadmindash( )

@@ -64,7 +64,42 @@ class Json_model extends CI_Model
          return $this->session->all_userdata();
         }
     }
+    
+    public function getpostsofuserfb( $id )
+	{
+		$query=$this->db->query("SELECT `userpost`.`id`,`userpost`.`post`, `userpost`.`likes`, `userpost`.`comment`, `userpost`.`favourites`, `userpost`.`retweet`, `userpost`.`returnpostid`, `userpost`.`posttype`,`posttype`.`name` AS `posttypename`, `userpost`.`user`,`userpost`.`share`, `userpost`.`timestamp`,`user`.`name` AS `username`,`post`.`text` AS `posttext`
+        FROM `userpost`
+        LEFT OUTER JOIN `user` ON `user`.`id`=`userpost`.`user`
+        LEFT OUTER JOIN `post` ON `post`.`id`=`userpost`.`post`
+        LEFT OUTER JOIN `posttype` ON `posttype`.`id`=`userpost`.`posttype`
+        WHERE `userpost`.`user`='$id' AND `userpost`.`posttype`='1' AND `userpost`.`timestamp`<> '1970-01-01 17:00:00' AND `userpost`.`timestamp`<> '0000-00-00 00:00:00'")->result();
+		return $query;
+	}
+    public function getpostsofusertwitter( $id )
+	{
+		$query=$this->db->query("SELECT `userpost`.`id`,`userpost`.`post`, `userpost`.`likes`, `userpost`.`comment`, `userpost`.`favourites`, `userpost`.`retweet`, `userpost`.`returnpostid`, `userpost`.`posttype`,`posttype`.`name` AS `posttypename`, `userpost`.`user`,`userpost`.`share`, `userpost`.`timestamp`,`user`.`name` AS `username`,`post`.`text` AS `posttext`
+        FROM `userpost`
+        LEFT OUTER JOIN `user` ON `user`.`id`=`userpost`.`user`
+        LEFT OUTER JOIN `post` ON `post`.`id`=`userpost`.`post`
+        LEFT OUTER JOIN `posttype` ON `posttype`.`id`=`userpost`.`posttype`
+        WHERE `userpost`.`user`='$id' AND `userpost`.`posttype`='2' AND `userpost`.`timestamp`<> '1970-01-01 17:00:00' AND `userpost`.`timestamp`<> '0000-00-00 00:00:00'")->result();
+		return $query;
+	}
+    public function edituserprofile($id,$name,$college,$contact,$city,$dob)
+	{
+		$data  = array(
+			'name' => $name,
+			'contact'=> $contact,
+            'dob'=> $dob,
+            'city'=> $city,
+            'college'=> $college
+		);
 
+		$this->db->where( 'id', $id );
+		$query=$this->db->update( 'user', $data );
+        
+		return 1;
+	}
     
 }
 	

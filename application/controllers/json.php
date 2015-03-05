@@ -140,6 +140,36 @@ class Json extends CI_Controller
 		}
 	}
     
+    function editprofilebefore()
+    {
+        $id=$this->input->get('id');
+		$data['message']=$this->user_model->beforeedit($id);	
+		$this->load->view('json',$data);
+    }
+    
+    function editprofilesubmit()
+	{
+		
+		$id=$this->input->get_post('id');
+        $name=$this->input->get_post('name');
+        $college=$this->input->get_post('college');
+        $contact=$this->input->get_post('contact');
+        $city=$this->input->get_post('city');
+        $dob=$this->input->get_post('dob');
+        
+        
+        if($dob != "")
+        {
+            $dob = date("Y-m-d",strtotime($dob));
+        }
+
+        if($this->json_model->edituserprofile($id,$name,$college,$contact,$city,$dob)==0)
+        $data['message']="User Editing was unsuccesful";
+        else
+        $data['message']="User edited Successfully.";
+        $this->load->view('json',$data);
+	}
+    
 }
 //EndOfFile
 ?>
