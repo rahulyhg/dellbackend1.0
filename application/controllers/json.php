@@ -357,6 +357,120 @@ class Json extends CI_Controller
         
     }
     
+    public function loginhauth($provider)
+	{
+		//log_message('debug', "controllers.HAuth.login($provider) called");
+
+		try
+		{
+			//log_message('debug', 'controllers.HAuth.login: loading HybridAuthLib');
+			//$this->load->library('HybridAuthLib');
+
+			if ($this->hybridauthlib->providerEnabled($provider))
+			{
+				//log_message('debug', "controllers.HAuth.login: service $provider enabled, trying to authenticate.");
+				$service = $this->hybridauthlib->authenticate($provider);
+
+				if ($service->isUserConnected())
+				{
+					//log_message('debug', 'controller.HAuth.login: user authenticated.');
+
+					$user_profile = $service->getUserProfile();
+
+					//log_message('info', 'controllers.HAuth.login: user profile:'.PHP_EOL.print_r($user_profile, TRUE));
+                    $userid=$this->session->userdata("id");
+					$data["message"]=$user_profile;
+					
+                    if ($this->uri->segment(3) == 'Facebook')
+                    {
+                        $name=$user_profile->firstName.' '.$user_profile->lastName;
+                        $dob=$user_profile->birthYear.'-'.$user_profile->birthMonth.'-'.$user_profile->birthDay;
+                        $newid=$user_profile->identifier;
+                        $checkfacebook=$this->db->query("SELECT count(*) as `count1` FROM `user` WHERE `facebookid`='$newid'")->row();
+                        if($checkfacebook->count1=='0')
+                        {
+                            $this->db->query("UPDATE `user` SET `facebookid`='$user_profile->identifier',`name`='$name',`sex`='$user_profile->gender',`dob`='$dob',`image`='$user_profile->photoURL' WHERE `id`='$userid'");
+
+                            $data = $this->session->all_userdata();
+                            $data['alertsuccess']="Successfully loggedin with Facebook Account.";
+                            $data['facebook'] = $user_profile->identifier;
+                            $this->session->set_userdata($data);
+                        }
+                        else
+                        {
+                            $data['alerterror']="An another user has already logged in to Facebook acount using same login.";
+                            $service->logout(); 
+                        }
+                    }
+                    if ($this->uri->segment(3) == 'Twitter')
+                    {
+                        $newid=$user_profile->identifier;
+                        $checktwitter=$this->db->query("SELECT count(*) as `count1` FROM `user` WHERE `twitterid`='$newid'")->row();
+                        if($checktwitter->count1=='0')
+                        {
+                            $this->db->query("UPDATE `user` SET `twitterid`='$user_profile->identifier' WHERE `id`='$userid'");
+                            $data = $this->session->all_userdata();
+                            $data['alertsuccess']="Successfully loggedin with Twitter Account.";
+                            $data['twitter'] = $user_profile->identifier;
+                            $this->session->set_userdata($data); 
+                            
+                        }
+                        else
+                        {
+                            $data['alerterror']="An another user has already logged in to Twitter acount using same login.";
+                            $service->logout(); 
+                        }
+                    }
+                    
+                    $data['redirect']="site/index";
+			        $this->load->view("redirect",$data);
+				}
+				else // Cannot authenticate user
+				{
+					show_error('Cannot authenticate user');
+				}
+			}
+			else // This service is not enabled.
+			{
+				//log_message('error', 'controllers.HAuth.login: This provider is not enabled ('.$provider.')');
+				show_404($_SERVER['REQUEST_URI']);
+			}
+		}
+		catch(Exception $e)
+		{
+			$error = 'Unexpected error';
+			switch($e->getCode())
+			{
+				case 0 : $error = 'Unspecified error.'; break;
+				case 1 : $error = 'Hybriauth configuration error.'; break;
+				case 2 : $error = 'Provider not properly configured.'; break;
+				case 3 : $error = 'Unknown or disabled provider.'; break;
+				case 4 : $error = 'Missing provider application credentials.'; break;
+				case 5 : //log_message('debug', 'controllers.HAuth.login: Authentification failed. The user has canceled the authentication or the provider refused the connection.');
+				         //redirect();
+				         if (isset($service))
+				         {
+				         	//log_message('debug', 'controllers.HAuth.login: logging out from service.');
+				         	$service->logout();
+				         }
+				         show_error('User has cancelled the authentication or the provider refused the connection.');
+				         break;
+				case 6 : $error = 'User profile request failed. Most likely the user is not connected to the provider and he should to authenticate again.';
+				         break;
+				case 7 : $error = 'User not connected to the provider.';
+				         break;
+			}
+
+			if (isset($service))
+			{
+				$service->logout();
+			}
+
+			//log_message('error', 'controllers.HAuth.login: '.$error);
+			show_error('Error authenticating user.');
+		}
+	}
+    
     
 }
 //EndOfFile
