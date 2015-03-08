@@ -259,13 +259,20 @@ class Json extends CI_Controller
         $this->load->view('json',$data);
     }
     
-    
+    function getuserpostcount()
+    {
+        $post=$this->input->get_post("post");
+        $data["message"]=$this->json_model->getuserpostcount($post);
+        $this->load->view('json',$data);
+    }
     
     public function posttweet()
     {
         $twitter = $this->hybridauthlib->authenticate("Twitter");
-        $message=$this->input->get_post("message");
+        
         $post=$this->input->get('id');
+        $compost=$this->json_model->getpostdetails($post);
+        $message=$compost->text;
         $twitterid = $twitter->getUserProfile();
         $twitterid = $twitterid->identifier;
         
@@ -300,10 +307,13 @@ class Json extends CI_Controller
     public function postfb()
     {
         $post=$this->input->get('id');
+        $compost=$this->json_model->getpostdetails($post);
+        $message=$compost->text;
+        $image=$compost->image;
+        $link=$compost->link;
+        
         $facebook = $this->hybridauthlib->authenticate("Facebook");
-        $message=$this->input->get_post("message");
-        $image=$this->input->get_post("image");
-        $link=$this->input->get_post("link");
+        
         
         $facebookid = $facebook->getUserProfile();
         $facebookid = $facebookid->identifier;

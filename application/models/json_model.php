@@ -180,7 +180,20 @@ class Json_model extends CI_Model
         }
         return $result;
         
-    }    
+    }   
+    
+    public function getuserpostcount($post)
+	{
+        $id=$this->session->userdata("id");
+		$query=$this->db->query( "SELECT count(*) as `count` FROM `userpost` WHERE `user`='$user' AND `post`='$post'" )->row();
+		return $query;
+	}
+    
+    public function getpostdetails($post)
+	{
+        $query=$this->db->query( "SELECT * FROM `post` WHERE `id`='$post'" )->row();
+		return $query;
+	}
     
 }
 	
