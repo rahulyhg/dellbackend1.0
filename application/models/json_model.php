@@ -185,7 +185,7 @@ class Json_model extends CI_Model
     public function getuserpostcount($post)
 	{
         $id=$this->session->userdata("id");
-		$query=$this->db->query( "SELECT count(*) as `count` FROM `userpost` WHERE `user`='$user' AND `post`='$post'" )->row();
+		$query=$this->db->query( "SELECT count(*) as `count` FROM `userpost` WHERE `user`='$id' AND `post`='$post'" )->row();
 		return $query;
 	}
     
