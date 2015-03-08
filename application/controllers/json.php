@@ -285,8 +285,7 @@ class Json extends CI_Controller
         {
             $this->userpost_model->addpostid($data["message"]->id_str,$post);
             $data['alertsuccess']="Tweeted Successfully.";
-            $data['redirect']="site/viewtwitterpost";
-            $this->load->view("redirect",$data);
+            redirect('http://dellcampassador.com/success.html', 'location', 301);
         }
         else
         {
@@ -336,8 +335,7 @@ class Json extends CI_Controller
             {
 			$data['alertsuccess']="Posted Successfully.";
             $this->userpost_model->addpostid($data["message"]['id'],$post);
-            $data['redirect']="site/viewfacebookpost";
-            $this->load->view("redirect",$data);
+            redirect('http://dellcampassador.com/success.html', 'location', 301);
             }
             else
             {
@@ -450,8 +448,7 @@ class Json extends CI_Controller
                         }
                     }
                     
-                    $data['redirect']="site/index";
-			        $this->load->view("redirect",$data);
+                    redirect('http://dellcampassador.com/success.html', 'location', 301);
 				}
 				else // Cannot authenticate user
 				{
