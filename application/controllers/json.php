@@ -702,6 +702,23 @@ class Json extends CI_Controller
     
     
     
+    public function createsuggestion() {
+        
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $name=$data['text'];
+        $contact=$data['image'];
+        $city=$data['posttype'];
+        $dob=$data['link'];
+        
+        if($this->json_model->createsugpost($text,$image,$posttype,$link)==0)
+        $data['message']="false";
+		else
+		$data['message']="true";
+
+		$this->load->view("json",$data);
+    }
+    
     
     
     

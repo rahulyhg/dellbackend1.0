@@ -201,7 +201,25 @@ class Json_model extends CI_Model
 		return $query;
 	}
     
-    
+    public function createsugpost($text,$image,$posttype,$link)
+	{
+        $userid=$this->session->userdata("id");
+		$data  = array(
+			'text' => $text,
+			'user' => $userid,
+			'suggestionstatus' => 'Pending',
+			'posttype' => $posttype,
+			'link' => $link,
+			'image' => $image
+		);
+		$query=$this->db->insert( 'suggestion', $data );
+		$id=$this->db->insert_id();
+		
+		if(!$query)
+			return  0;
+		else
+			return  $id;
+	}
     
     
     
