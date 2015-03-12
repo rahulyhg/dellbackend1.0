@@ -71,7 +71,10 @@ class Chintantable {
             }
             if($search!="")
             {
-                $searchquery.=" ".$element->field." LIKE '%".$search."%' OR ";
+                if($element->issearch!="no")
+                {
+                    $searchquery.=" ".$element->field." LIKE '%".$search."%' OR ";
+                }
             }
             
         }

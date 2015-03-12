@@ -67,18 +67,22 @@ class Json extends CI_Controller
         $elements[3]->sort="1";
         $elements[3]->header="Score";
         $elements[3]->alias="score";
+        $elements[3]->issearch="no";
+        
         
         $elements[4]=new stdClass();
         $elements[4]->field="IFNULL(SUM(`userpost`.`share`+`userpost`.`likes`+`userpost`.`comment`),0)";
         $elements[4]->sort="1";
         $elements[4]->header="Facebook";
         $elements[4]->alias="facebook";
+        $elements[4]->issearch="no";
         
         $elements[5]=new stdClass();
         $elements[5]->field="IFNULL(SUM(`userpost`.`retweet`+`userpost`.`favourites`),0)";
         $elements[5]->sort="1";
         $elements[5]->header="Twitter";
         $elements[5]->alias="twitter";
+        $elements[5]->issearch="no";
        
         $elements[6]=new stdClass();
         $elements[6]->field="`user`.`rank`";
