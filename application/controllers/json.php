@@ -558,7 +558,7 @@ class Json extends CI_Controller
         $maxrow=$this->input->get_post("maxrow");
         if($maxrow=="")
         {
-            $maxrow=20;
+            $maxrow=5;
         }
         
         if($orderby=="")
@@ -706,15 +706,15 @@ class Json extends CI_Controller
         
         $data = json_decode(file_get_contents('php://input'), true);
 
-        $name=$data['text'];
-        $contact=$data['image'];
-        $city=$data['posttype'];
-        $dob=$data['link'];
+        $text=$data['text'];
+        $image=$data['image'];
+        $posttype=$data['posttype'];
+        $link=$data['link'];
         
         if($this->json_model->createsugpost($text,$image,$posttype,$link)==0)
-        $data['message']="false";
+        $data['message']=false;
 		else
-		$data['message']="true";
+		$data['message']=true;
 
 		$this->load->view("json",$data);
     }
