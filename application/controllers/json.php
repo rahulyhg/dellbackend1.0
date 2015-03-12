@@ -496,6 +496,88 @@ class Json extends CI_Controller
 		}
 	}
     
+    function viewsuggestionjson()
+	{
+        $userid=$this->session->userdata('id');
+        
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`suggestion`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`suggestion`.`text`";
+        $elements[1]->sort="1";
+        $elements[1]->header="Text";
+        $elements[1]->alias="text";
+        
+        $elements[2]=new stdClass();
+        $elements[2]->field="`suggestion`.`image`";
+        $elements[2]->sort="1";
+        $elements[2]->header="Image";
+        $elements[2]->alias="image";
+        
+        $elements[3]=new stdClass();
+        $elements[3]->field="`suggestion`.`timestamp`";
+        $elements[3]->sort="1";
+        $elements[3]->header="timestamp";
+        $elements[3]->alias="timestamp";
+        
+        $elements[4]=new stdClass();
+        $elements[4]->field="`suggestion`.`suggestionstatus`";
+        $elements[4]->sort="1";
+        $elements[4]->header="Status";
+        $elements[4]->alias="suggestionstatus";
+        
+        $elements[5]=new stdClass();
+        $elements[5]->field="`suggestion`.`adminmessage`";
+        $elements[5]->sort="1";
+        $elements[5]->header="Admin Message";
+        $elements[5]->alias="adminmessage";
+        
+        $elements[6]=new stdClass();
+        $elements[6]->field="`suggestion`.`posttype`";
+        $elements[6]->sort="1";
+        $elements[6]->header="Posttype";
+        $elements[6]->alias="posttype";
+        
+        $elements[7]=new stdClass();
+        $elements[7]->field="`suggestion`.`link`";
+        $elements[7]->sort="1";
+        $elements[7]->header="Link";
+        $elements[7]->alias="link";
+        
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        
+        if($orderby=="")
+        {
+            $orderby="id";
+            $orderorder="ASC";
+        }
+        $suggestionstatus=$this->input->get_post("status");
+        $suggestionstatus2="";
+        if($suggestionstatus=="")
+        {
+            $suggestionstatus2=" AND `suggestion`.`suggestionstatus`='$suggestionstatus'";
+        }
+       
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `suggestion`","WHERE `suggestion`.`user`='$userid' $post");
+        
+		$this->load->view("json",$data);
+	} 
+    
     
 }
 //EndOfFile

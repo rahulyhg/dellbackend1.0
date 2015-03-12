@@ -195,6 +195,10 @@ class Json_model extends CI_Model
 		return $query;
 	}
     
+    
+    
+    
+    
 }
 	
 ?>
