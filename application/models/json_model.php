@@ -195,6 +195,12 @@ class Json_model extends CI_Model
 		return $query;
 	}
     
+    public function getpostsugdetails($post)
+	{
+        $query=$this->db->query( "SELECT * FROM `suggestion` WHERE `id`='$post'" )->row();
+		return $query;
+	}
+    
     
     
     

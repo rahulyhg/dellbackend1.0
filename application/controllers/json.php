@@ -579,6 +579,132 @@ class Json extends CI_Controller
 	} 
     
     
+    
+    
+    
+    
+    public function postsugtweet()
+    {
+        $twitter = $this->hybridauthlib->authenticate("Twitter");
+        
+        $post=$this->input->get('id');
+        $compost=$this->json_model->getpostsugdetails($post);
+        $message=$compost->text;
+        $twitterid = $twitter->getUserProfile();
+        $twitterid = $twitterid->identifier;
+        
+        $userid=$this->session->userdata('id');
+        $querytwitter=$this->db->query("SELECT `twitterid` FROM `user` WHERE `id`='$userid'")->row();
+        $twitternid=$querytwitter->twitterid;
+        if($twitterid==$twitternid) {
+        $data["message"]=$twitter->api()->post("statuses/update.json?status=$message");
+        if(isset($data["message"]->id_str))
+        {
+            $this->userpost_model->addpostid($data["message"]->id_str,$post);
+            $data['alertsuccess']="Tweeted Successfully.";
+            redirect('http://dellcampassador.com/success.html', 'location', 301);
+        }
+        else
+        {
+			$data['alerterror'] = "Tweet Error";
+            $data['redirect']="site/viewtwitterpost";
+		    $this->load->view("redirect",$data);
+        }
+        }
+        else
+        {
+                $data['alerterror'] = "Please login with your own Twitter Profile.";
+                $data['redirect']="site/viewtwitterpost";
+                $this->load->view("redirect",$data);
+        }
+//        $this->load->view("json",$data);
+    }
+    
+    public function postsugfb()
+    {
+        $post=$this->input->get('id');
+        $compost=$this->json_model->getpostsugdetails($post);
+        $message=$compost->text;
+        $image=$compost->image;
+        $link=$compost->link;
+        
+        $facebook = $this->hybridauthlib->authenticate("Facebook");
+        
+        
+        $facebookid = $facebook->getUserProfile();
+        $facebookid = $facebookid->identifier;
+        
+        $userid=$this->session->userdata('id');
+        $queryfacebook=$this->db->query("SELECT `facebookid` FROM `user` WHERE `id`='$userid'")->row();
+        $facebooknid=$queryfacebook->facebookid;
+        
+        if($facebookid==$facebooknid)
+        {
+            
+        if($image=="")
+        {
+            $data["message"]=$facebook->api()->api("v2.2/me/feed", "post", array(
+                "message" => "$message",
+                "link"=>"$link"
+            ));
+            
+            if(isset($data["message"]['id']))
+            {
+			$data['alertsuccess']="Posted Successfully.";
+            $this->userpost_model->addpostid($data["message"]['id'],$post);
+            redirect('http://dellcampassador.com/success.html', 'location', 301);
+            }
+            else
+            {
+                $data['alerterror'] = "Post Error";
+                $data['redirect']="site/viewfacebookpost";
+                $this->load->view("redirect",$data);
+            }
+        }
+        else
+        {
+            $data["message"]=$facebook->api()->api("v2.2/me/feed", "post", array(
+                "message" => "$message",
+                "picture"=> "$image",
+                "link"=>"$link"
+            ));
+            
+//            print_r($data['message']["id"]);
+            
+            if(isset($data["message"]["id"]))
+            {
+			$data['alertsuccess']="Posted Successfully.";
+            $this->userpost_model->addpostid($data["message"]["id"],$post);
+            $data['redirect']="site/viewfacebookpost";
+            $this->load->view("redirect",$data);
+            }
+            else
+            {
+                $data['alerterror'] = "Post Error";
+                $data['redirect']="site/viewfacebookpost";
+                $this->load->view("redirect",$data);
+            }
+        }
+        
+        
+        }
+        else
+        {
+            
+                $data['alerterror'] = "Please login with your own Facebook Profile.";
+                $data['redirect']="site/viewfacebookpost";
+                //echo $data['alerterror'];
+                $this->load->view("redirect",$data);
+        }
+
+        
+    }
+    
+    
+    
+    
+    
+    
 }
 //EndOfFile
 ?>
