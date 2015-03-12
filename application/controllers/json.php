@@ -568,7 +568,7 @@ class Json extends CI_Controller
         }
         $suggestionstatus=$this->input->get_post("status");
         $suggestionstatus2="";
-        if($suggestionstatus=="")
+        if($suggestionstatus!="")
         {
             $suggestionstatus2=" AND `suggestion`.`suggestionstatus`='$suggestionstatus'";
         }
