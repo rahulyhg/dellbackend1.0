@@ -573,7 +573,7 @@ class Json extends CI_Controller
             $suggestionstatus2=" AND `suggestion`.`suggestionstatus`='$suggestionstatus'";
         }
        
-        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `suggestion`","WHERE `suggestion`.`user`='$userid' $post");
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `suggestion`","WHERE `suggestion`.`user`='$userid' $suggestionstatus2");
         
 		$this->load->view("json",$data);
 	} 
