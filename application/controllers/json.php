@@ -730,12 +730,13 @@ class Json extends CI_Controller
     }
     
     
+   
     public function fileupload() {
         $config['upload_path'] = './uploads/';
         $config['allowed_types'] = 'gif|jpg|png|jpeg';
         $this->load->library('upload', $config);
-        $image="";
-        if (  $this->upload->do_upload())
+        $image="file";
+        if (  $this->upload->do_upload($image))
         {
             $uploaddata = $this->upload->data();
             $image=$uploaddata['file_name'];
@@ -760,9 +761,21 @@ class Json extends CI_Controller
             
             
         }
-        $data["message"]=$this->image_lib->dest_image;
+        
+	$obj = new stdClass();
+	$obj->name=$this->image_lib->dest_image;
+        $data["message"]=$obj;
+
         $this->load->view("json",$data);
     }
+    
+    public function postjson() {
+        
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        print_r($data);
+    }
+    
     
     
     
