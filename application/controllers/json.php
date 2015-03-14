@@ -500,6 +500,12 @@ class Json extends CI_Controller
 		}
 	}
     
+	function allsuggestion()
+	{
+        $data["message"]=$this->json_model->allsuggestion();
+        $this->load->view('json',$data);
+	}
+	
     function viewsuggestionjson()
 	{
         $userid=$this->session->userdata('id');

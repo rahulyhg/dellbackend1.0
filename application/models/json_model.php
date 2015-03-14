@@ -146,6 +146,21 @@ class Json_model extends CI_Model
         $query->remaining=floatval($totalcountpost->count1)-floatval($postdonebyuser->count2);
 		return $query;
 	}
+	
+	public function allsuggestion()
+	{
+		$userid=$this->session->userdata("id");
+		$pending=$this->db->query("SELECT `suggestionstatus`,count(`id`) as `count`  FROM `suggestion` WHERE `suggestionstatus`='Pending' AND `user` = $userid")->row();
+		$publish=$this->db->query("SELECT `suggestionstatus`,count(`id`) as `count`  FROM `suggestion` WHERE `suggestionstatus`='Publish' AND `user` = $userid")->row();
+		$rejected=$this->db->query("SELECT `suggestionstatus`,count(`id`) as `count`  FROM `suggestion` WHERE `suggestionstatus`='Rejected' AND `user` = $userid")->row();
+		$suggested=$this->db->query("SELECT `suggestionstatus`,count(`id`) as `count`  FROM `suggestion` WHERE `user` = '$userid'")->row();
+		$query=new stdClass();
+		$query->pendingp=$pending;
+		$query->publishp=$publish;
+		$query->rejectedp=$rejected;
+		$query->suggestedp=$suggested;
+		return $query;
+	}
     
     public function beforeedit(  )
 	{
