@@ -168,8 +168,7 @@ class Json_model extends CI_Model
     public function beforeedit(  )
 	{
         $id=$this->session->userdata("id");
-		$this->db->where( 'id', $id );
-		$query=$this->db->get( 'user' )->row();
+		$query=$this->db->get( "SELECT `college`.`name` as `name`,`user`.* FROM `user` WHERE `id`='$id'" )->row();
 		return $query;
 	}
     public function getnextpost($lastid=0,$direction=1,$social=1)
