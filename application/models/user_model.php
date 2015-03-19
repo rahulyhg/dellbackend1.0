@@ -7,6 +7,8 @@ class User_model extends CI_Model
 	public function validate($username,$password )
 	{
 		
+        $query=$this->db->query("SELECT MAX(`rank`) as `rank` FROM `user`")->row();
+$newrank=intval($query->rank)+1;
 		$password=md5($password);
 		$query ="SELECT `user`.`id`,`user`.`name` as `name`,`user`.`email`,`user`.`accesslevel`,`accesslevel`.`name` as `access`,`user`.`facebookid`,`user`.`twitterid` FROM `user`
 		INNER JOIN `accesslevel` ON `user`.`accesslevel` = `accesslevel`.`id` 
@@ -24,6 +26,7 @@ class User_model extends CI_Model
 				'accesslevel' => $row->accesslevel ,
 				'facebook' => $row->facebookid ,
 				'twitter' => $row->twitterid ,
+                'rank'=> $newrank,
 				'logged_in' => 'true',
 			);
 			$this->session->set_userdata( $newdata );
