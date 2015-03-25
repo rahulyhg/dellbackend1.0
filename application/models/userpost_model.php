@@ -134,7 +134,7 @@ class Userpost_model extends CI_Model
         LEFT OUTER JOIN `user` ON `user`.`id`=`userpost`.`user`
         LEFT OUTER JOIN `post` ON `post`.`id`=`userpost`.`post`
         LEFT OUTER JOIN `posttype` ON `posttype`.`id`=`userpost`.`posttype`
-        WHERE `userpost`.`user`='$id' AND `userpost`.`timestamp`<> '1970-01-01 17:00:00' AND `userpost`.`timestamp`<> '0000-00-00 00:00:00'")->result();
+        WHERE `userpost`.`user`='$id'")->result();
 		return $query;
 	}
     public function getadmindash( )
@@ -158,7 +158,7 @@ class Userpost_model extends CI_Model
 		$this->load->dbutil();
 		$query=$this->db->query("SELECT `user`.`name` AS `User Name`,`posttype`.`name` AS `Post Type`,`userpost`.`likes` AS `Likes`, `userpost`.`comment` AS `Comments`,`userpost`.`share` AS `Shares`,`userpost`.`retweet` AS `Retweets`, `userpost`.`favourites` AS `Favourites`,  `userpost`.`timestamp` AS `Timestamp`,`post`.`text` AS `Post Text`
         FROM `userpost`
-        LEFT OUTER JOIN `user` ON `user`.`id`=`userpost`.`user`
+        INNER JOIN `user` ON `user`.`id`=`userpost`.`user`
         LEFT OUTER JOIN `post` ON `post`.`id`=`userpost`.`post`
         LEFT OUTER JOIN `posttype` ON `posttype`.`id`=`userpost`.`posttype` WHERE `userpost`.`timestamp`<>'0000-00-00 00:00:00'
 ");

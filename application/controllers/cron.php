@@ -13,7 +13,8 @@ class Cron extends CI_Controller
         $id=$userpost->id;
         if($posttype==1)
         {
-
+$returnpostid=explode("_", $returnpostid);
+$returnpostid=$returnpostid[1];
             $facebookdet=$this->facebookoauth->get_post($returnpostid);
             
             $this->userpost_model->addfacebookcrondata($id,$facebookdet->date,$facebookdet->likes,$facebookdet->shares,$facebookdet->comments);
@@ -70,7 +71,7 @@ function socialupdate2()
     {
         $this->load->library("facebookoauth");
         $this->load->library('twitteroauth');
-    $userpostquery=$this->db->query("SELECT `id`,`returnpostid`,`posttype` FROM `userpost` WHERE `posttype`='1' ")->result();
+    $userpostquery=$this->db->query("SELECT `id`,`returnpostid`,`posttype` FROM `userpost` WHERE `posttype`='1' AND `id`='488' ")->result();
     foreach($userpostquery as $userpost)
     {
         $returnpostid=$userpost->returnpostid;
@@ -78,9 +79,11 @@ function socialupdate2()
         $id=$userpost->id;
         if($posttype==1)
         {
-
+$returnpostid=explode("_", $returnpostid);
+$returnpostid=$returnpostid[1];
             $facebookdet=$this->facebookoauth->get_post($returnpostid);
-            
+
+
             $this->userpost_model->addfacebookcrondata($id,$facebookdet->date,$facebookdet->likes,$facebookdet->shares,$facebookdet->comments);
         }
         else if($posttype==2)

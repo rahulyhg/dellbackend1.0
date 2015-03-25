@@ -19,14 +19,14 @@ class Facebookoauth {
           $app_access_token
         ));*/
 
-$app_access_token ='access_token=CAAMnF8WxphsBAPIogVnclZBAT7YGHMl2rRMO2GIJUrB2WhRF00yECQb12ULcBfLBYrcPgU0pkQDKOdpY6qaqRdF6EnqZA33c9kC63WA8qkUJEeDOGmjYD31rSASPoBLpLrRZCcGo6HzU9kbjSmUeHNmuqZANpmFycOLbIYZCT6MZAZCM0sXFneoXhwExfpEW2cZD';
+$app_access_token ='access_token=CAAMnF8WxphsBAEav14OtigXd8NjBvgeTG1Gr7z7c2uoFghoJyEBB3ZBYkrD1y4Akzw25QZCwXu4ZBhnZAp3ELsZCu8bJr2jtxH0Itnrz1rGYnZC3VCo0uYOnjhh3O9G9bp0F0BFaOIv3wyM6qikZCIDPlQ1bGsSzXv91eudcJDEQhxCkYKcDaJ82GnPtT0XY1NQ9Ljpl4LZC9pYZB6q3ZAZAfPw';
         //echo "https://graph.facebook.com/v2.2/921220457889147_923405451003981/likes?summary=1&$app_access_token";
         $new=new stdClass();
 echo "https://graph.facebook.com/v2.2/$id?$app_access_token";
 $demo=file_get_contents("https://graph.facebook.com/v2.2/$id?$app_access_token");
 $demo=json_decode($demo);
 print_r($demo);
-$demo=$demo->created_time;
+$demo=$demo->updated_time;
 $demo=strtotime($demo);
 $new->date=date("Y-m-d H:i:s",$demo);
 //print_r($new->date);
