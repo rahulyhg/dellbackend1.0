@@ -185,7 +185,7 @@ class Json extends CI_Controller
       
         $data["message"]=new stdClass();
         $data["message"]->posts=$this->json_model->getpostsofuserfb();
-        $data["message"]->stats=$this->json_model->getfacebookstats();
+        $data["message"]->stats=$this->json_model->gettwitterstats();
         $this->load->view('json',$data);
     }
     
