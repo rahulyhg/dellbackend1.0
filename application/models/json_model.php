@@ -68,7 +68,7 @@ class Json_model extends CI_Model
     public function getpostsofuserfb(  )
 	{
         $id=$this->session->userdata("id");
-		$query=$this->db->query("SELECT `userpost`.`id`,`userpost`.`post`, `userpost`.`likes`, `userpost`.`comment`, `userpost`.`favourites`, `userpost`.`retweet`, `userpost`.`returnpostid`, `userpost`.`posttype`,`posttype`.`name` AS `posttypename`, `userpost`.`user`,`userpost`.`share`, `userpost`.`timestamp`,`user`.`name` AS `username`,`post`.`text` AS `posttext`
+		$query=$this->db->query("SELECT `userpost`.`id`,`userpost`.`post`, `userpost`.`likes`, `userpost`.`comment`, `userpost`.`favourites`, `userpost`.`retweet`, `userpost`.`returnpostid`, `userpost`.`posttype`,`posttype`.`name` AS `posttypename`, `userpost`.`user`,`userpost`.`share`,`post`.`image` as `image`, `userpost`.`timestamp`,`user`.`name` AS `username`,`post`.`text` AS `posttext`
         FROM `userpost`
         LEFT OUTER JOIN `user` ON `user`.`id`=`userpost`.`user`
         LEFT OUTER JOIN `post` ON `post`.`id`=`userpost`.`post`
@@ -127,7 +127,7 @@ class Json_model extends CI_Model
 	{
         $userid=$this->session->userdata("id");
         $totalcountpost=$this->db->query("SELECT count(`id`) as `count1` FROM `post` WHERE `posttype`='1'")->row();
-        $postdonebyuser=$this->db->query("SELECT COUNT(*) as `count2` FROM (SELECT DISTINCT `post` FROM `userpost` WHERE `userpost`.`user`='$userid' AND `userpost`.`posttype`='1') as `tab1`")->row();
+        $postdonebyuser=$this->db->query("SELECT COUNT(*) as `count2` FROM (SELECT  `post` FROM `userpost` WHERE `userpost`.`user`='$userid' AND `userpost`.`posttype`='1') as `tab1`")->row();
         $reach=$this->db->query("SELECT IFNULL(SUM(`userpost`.`share`+`userpost`.`likes`+`userpost`.`comment`),0) as `reach` FROM `userpost` WHERE `userpost`.`user`='$userid'  GROUP BY `userpost`.`user`")->row();
         $query=new stdClass();
         $query->totalpost=floatval($totalcountpost->count1);
@@ -141,12 +141,13 @@ class Json_model extends CI_Model
 	{
         $userid=$this->session->userdata("id");
         $totalcountpost=$this->db->query("SELECT count(`id`) as `count1` FROM `post` WHERE `posttype`='2'")->row();
-        $postdonebyuser=$this->db->query("SELECT COUNT(*) as `count2` FROM (SELECT DISTINCT `post` FROM `userpost` WHERE `userpost`.`user`='$userid' AND `userpost`.`posttype`='2') as `tab1`")->row();
+        $postdonebyuser=$this->db->query("SELECT COUNT(*) as `count2` FROM (SELECT  `post` FROM `userpost` WHERE `userpost`.`user`='$userid' AND `userpost`.`posttype`='2') as `tab1`")->row();
         $reach=$this->db->query("SELECT IFNULL(SUM(`userpost`.`retweet`+`userpost`.`favourites`),0) as `reach` FROM `userpost` WHERE `userpost`.`user`='$userid' GROUP BY `userpost`.`user`" )->row();
         $query=new stdClass();
         $query->totalpost=floatval($totalcountpost->count1);
         $query->actiondone=floatval($postdonebyuser->count2);
         $query->remaining=floatval($totalcountpost->count1)-floatval($postdonebyuser->count2);
+        $query->reach=floatval($reach->reach);
 		return $query;
 	}
 	
